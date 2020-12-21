@@ -89,7 +89,7 @@ module swerv
 `endif
 
    // ICache , ITAG  ports
-   output logic [31:3]           ic_rw_addr,
+   output logic [31:2]           ic_rw_addr,
    output logic [3:0]            ic_tag_valid,
    output logic [3:0]            ic_wr_en,
    output logic                  ic_rd_en,
@@ -837,8 +837,8 @@ module swerv
 
    logic        ifu_i0_icaf;
    logic        ifu_i1_icaf;
-   logic        ifu_i0_icaf_f1;
-   logic        ifu_i1_icaf_f1;
+   logic        ifu_i0_icaf_second;
+   logic        ifu_i1_icaf_second;
    logic        ifu_i0_perr;
    logic        ifu_i1_perr;
    logic        ifu_i0_sbecc;

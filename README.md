@@ -1,6 +1,6 @@
-# EH1 SweRV RISC-V Core<sup>TM</sup> 1.5 from Western Digital
+# EH1 SweRV RISC-V Core<sup>TM</sup> 1.8 from Western Digital
 
-This repository contains the SweRV EH1.5 Core<sup>TM</sup>  design RTL
+This repository contains the SweRV EH1 Core<sup>TM</sup>  design RTL
 
 ## License
 
@@ -28,7 +28,7 @@ Files under the [tools](tools/) directory may be available under a different lic
  
 ## Dependencies
 
-- Verilator **(4.020 or later)** must be installed on the system if running with verilator
+- Verilator **(4.030 or later)** must be installed on the system if running with verilator
 - If adding/removing instructions, espresso must be installed (used by *tools/coredecode*)
 - RISCV tool chain (based on gcc version 7.3 or higher) must be
 installed so that it can be used to prepare RISCV binaries to run.
@@ -95,6 +95,15 @@ Example for csh or its derivatives:
     
     Snapshots are placed in `$BUILD_PATH` directory
 
+**Building an FPGA speed optimized model:**  
+Use ``-fpga_optimize=1`` option to ``swerv.config`` to build a model that removes clock gating logic from flop model so that the FPGA builds can run at higher speeds. **This is now the default option for
+targets other than ``default_pd``.**
+
+**Building a Power optimized model (ASIC flows):**  
+Use ``-fpga_optimize=0`` option to ``swerv.config`` to build a model that **enables** clock gating logic into the flop model so that the ASIC flows get a better power footprint. **This is now the default option for
+target``default_pd``.**
+
+### Running RTL simulations
 
 1. Running a simple Hello World program (verilator)
 
@@ -170,10 +179,10 @@ User can provide test specific linker file in form `<test_name>.ld` to build the
  in the same directory with the test source.
 
 User also can create a test specific makefile in form `<test_name>.makefile`, contaning building instructions
-how to create `program.hex`, `data.hex` files used by simulation. The private makefile should be in the same directory
+how to create `program.hex` file, used by simulation. The private makefile should be in the same directory
 as the test source.  
-*(`program.hex` file is loaded to instruction bus memory slave and `data.hex` file is loaded to LSU bus memory slave and
-optionally to DCCM at the beginning of simulation)*.
+*(`program.hex` file is loaded to instruction and data bus memory slaves and
+optionally to DCCM/ICCM at the beginning of simulation)*.
 
 Note: You may need to delete `program.hex` file from work directory, when run a new test.
 
@@ -189,8 +198,6 @@ cmark_iccm        - the same as above, but with code preloaded to iccm - runs on
 ```
 
 The `$RV_ROOT/testbench/hex` directory contains precompiled hex files of the tests, ready for simulation in case RISCV SW tools are not installed.
-
-
 
 
 ----
