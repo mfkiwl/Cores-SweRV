@@ -157,6 +157,8 @@ module dec
 
    input logic       iccm_dma_sb_error,     // ICCM DMA single bit error
 
+   input logic        dma_mem_dccm_req,
+
    input logic exu_i0_flush_final,          // slot0 flush
    input logic exu_i1_flush_final,          // slot1 flush
 
@@ -378,6 +380,7 @@ module dec
    output logic  dec_tlu_sideeffect_posted_disable,    // disable posted writes to side-effect address
    output logic  dec_tlu_core_ecc_disable,           // disable core ECC
    output logic  dec_tlu_sec_alu_disable,            // disable secondary ALU
+   output logic  dec_tlu_dccm_nonblock_dma_disable, // disable dma nonblock
    output logic  dec_tlu_non_blocking_disable,       // disable non blocking loads
    output logic  dec_tlu_fast_div_disable,           // disable fast divider
    output logic  dec_tlu_bpred_disable,              // disable branch prediction
@@ -509,13 +512,6 @@ module dec
 
    assign dec_dbg_rddata[31:0] = dec_i0_wdata_wb[31:0];
 
-   dec_ib_ctl instbuff (.*
-                        );
-
-   dec_decode_ctl decode (.*);
-
-   dec_tlu_ctl tlu (.*);
-
    // Temp hookups
    assign wen_bank_id = '0;
    assign wr_bank_id  = '0;
@@ -574,6 +570,12 @@ module dec
    assign trace_rv_trace_pkt.trace_rv_i_interrupt_ip = {dec_tlu_int_valid_wb1,2'b0};
    assign trace_rv_trace_pkt.trace_rv_i_tval_ip =    dec_tlu_mtval_wb1[31:0];        // replicate across ports
 
+   dec_ib_ctl instbuff (.*
+                        );
+
+   dec_decode_ctl decode (.*);
+
+   dec_tlu_ctl tlu (.*);
 
 
 // end trace
